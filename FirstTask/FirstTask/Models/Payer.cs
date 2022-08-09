@@ -1,4 +1,4 @@
-﻿namespace FirstTask
+﻿namespace FirstTask.Models
 {
     internal class Payer
     {

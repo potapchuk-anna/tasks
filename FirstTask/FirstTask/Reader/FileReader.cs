@@ -1,4 +1,5 @@
 ﻿using CsvHelper.Configuration;
+using FirstTask.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,18 +7,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstTask
+namespace FirstTask.Reader
 {
     abstract class FileReader
     {
-        int InvalidLines { get; set; }
+        StreamReader reader;
+        string path;
+        public FileReader(string path)
+        {
+            this.path = path;           
+            reader = new StreamReader(path);
+        }
+        public int InvalidLines { get; protected set; }
+        public int PassedFiles { get; protected set; }
+        public List<string> InvalidFilesList { get; protected set; } = new List<string>();
+        public int PassedLines { get; protected set; }
         protected abstract CsvConfiguration CreateConfig();
 
-        public List<Model> ReadData(string path)
+        public List<Model> ReadData()
         {
             List<Model> models = new List<Model>();
             var config = CreateConfig();
-            using (var reader = new StreamReader(path))
             using (var csv = new CsvHelper.CsvReader(reader, config))
             {
                 while (csv.Read())
@@ -25,15 +35,26 @@ namespace FirstTask
                     try
                     {
                         var model = ParseData(csv);
+                        PassedLines++;
                         models.Add(model);
                     }
                     catch
                     {
-
+                        InvalidLines++;
                         continue;
                     }
                 }
+                if (InvalidLines > 0)
+                {
+                    InvalidFilesList.Add(path);
+                }
+                else
+                {
+                    PassedFiles++;
+                }
             }
+
+            reader.Close();
             return models;
         }
         public Model ParseData(CsvHelper.CsvReader csv)
@@ -60,6 +81,14 @@ namespace FirstTask
                 addressComponents[1],
                 int.Parse(addressComponents[2]));
             return model;
+        }
+        public void Close()
+        {
+            reader.Close();
+        }
+        public void DeleteFile()
+        {
+            File.Delete(path);
         }
     }
 }

@@ -1,23 +1,28 @@
-﻿using CsvHelper.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TinyCsvParser;
+using CsvHelper;
+using System.Globalization;
+using CsvHelper.Configuration;
 
-namespace FirstTask
+namespace FirstTask.Reader
 {
-    internal class CsvReader:FileReader
+    internal class TxtReader : FileReader
     {
+        public TxtReader(string path) : base(path)
+        {
+
+        }
         protected override CsvConfiguration CreateConfig()
         {
             return new CsvConfiguration(CultureInfo.InvariantCulture)
             {
+                HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim
             };
         }
-
     }
 }

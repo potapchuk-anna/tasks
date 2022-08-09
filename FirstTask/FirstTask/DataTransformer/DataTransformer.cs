@@ -1,12 +1,13 @@
-﻿using System;
+﻿using FirstTask.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstTask
+namespace FirstTask.DataTransformer
 {
-    internal static class DataTransformer
+    internal class DataTransformer
     {
         public static List<TransformedData> Transform(List<Model> models)
         {
@@ -28,7 +29,7 @@ namespace FirstTask
                     }).ToList(),
                     Total = m.Sum(s => s.Payment)
                 }).ToList();
-                
+
         }
     }
 }
