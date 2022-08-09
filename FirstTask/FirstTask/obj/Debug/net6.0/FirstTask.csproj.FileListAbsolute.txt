@@ -4,12 +4,14 @@ D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\FirstTask.deps.json
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\FirstTask.runtimeconfig.json
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\FirstTask.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\FirstTask.pdb
+D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\CsvHelper.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\System.Drawing.Common.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\System.Security.Permissions.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\TinyCsvParser.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
@@ -26,5 +28,3 @@ D:\Tasks\tasks\FirstTask\FirstTask\obj\Debug\net6.0\refint\FirstTask.dll
 D:\Tasks\tasks\FirstTask\FirstTask\obj\Debug\net6.0\FirstTask.pdb
 D:\Tasks\tasks\FirstTask\FirstTask\obj\Debug\net6.0\FirstTask.genruntimeconfig.cache
 D:\Tasks\tasks\FirstTask\FirstTask\obj\Debug\net6.0\ref\FirstTask.dll
-D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\TinyCsvParser.dll
-D:\Tasks\tasks\FirstTask\FirstTask\bin\Debug\net6.0\CsvHelper.dll

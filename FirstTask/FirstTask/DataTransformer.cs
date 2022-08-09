@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FirstTask
 {
-    internal static class DataTransformer
+    internal class DataTransformer
     {
         public static List<TransformedData> Transform(List<Model> models)
         {

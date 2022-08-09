@@ -12,6 +12,10 @@ namespace FirstTask
 {
     internal class TxtReader : FileReader
     {
+        public TxtReader(string path) : base(path)
+        {
+
+        }
         protected override CsvConfiguration CreateConfig()
         {
             return new CsvConfiguration(CultureInfo.InvariantCulture)
