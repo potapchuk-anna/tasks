@@ -1,15 +1,22 @@
-﻿using System.Configuration;
+﻿using FirstTask.HelpFileManager;
+using FirstTask.Reader;
+using System.Configuration;
 
 namespace FirstTask
 {
     internal class CommandService
-    {      
+    {
         private CancellationTokenSource cancellationToken = new CancellationTokenSource();
         public void ProcessCommand()
         {
-            while (true)
+            Console.WriteLine("Welcome.\n" +
+                "You should write command start in order to start program.\n" +
+                "If you want to see list of commands you should write 'help'.\n");
+            string command = "";
+            while (command != "exit")
             {
-                string command = Console.ReadLine();
+                Console.Write("Enter command: ");
+                command = Console.ReadLine();
                 switch (command)
                 {
                     case "start":
@@ -24,17 +31,35 @@ namespace FirstTask
                     case "stop":
                         Stop();
                         break;
+                    case "help":
+                        Help();
+                        break;
+                    case "exit":
+                        break;
                     default:
-                        throw new Exception("There is not such command.");
+                        Console.WriteLine("Such command does not exist.");
+                        break;
                 }
             }
 
         }
+
+        private void Help()
+        {
+            Console.WriteLine("**********************");
+            Console.WriteLine("start - starts processing files.");
+            Console.WriteLine("reset - interrupts processing files and then starts again.");
+            Console.WriteLine("stop - stops processing files.");
+            Console.WriteLine("help - shows list of commands.");
+            Console.WriteLine("exit - exits the program");
+            Console.WriteLine("**********************");
+        }
+
         private void Start()
         {
             DateTime date = DateTime.Now;
             MetaLogFileManager metaLogFileManager = new MetaLogFileManager();
-            cancellationToken = new CancellationTokenSource();           
+            cancellationToken = new CancellationTokenSource();
             if (ConfigurationSettings.AppSettings["input"] is not null
             && ConfigurationSettings.AppSettings["output"] is not null)
                 Task.Run(() =>
@@ -42,32 +67,27 @@ namespace FirstTask
                     try
                     {
                         while (!cancellationToken.IsCancellationRequested)
-                        {                                         
+                        {
                             List<Task> tasks = new List<Task>();
                             List<string> filePathes = PathGetter.GetPathes();
                             foreach (string filePath in filePathes)
                             {
-                                if(!IsFileLocked(filePath))
-                                tasks.Add(Task.Run(() =>
-                                {
-                                    FileReader fileReader = filePath.EndsWith(".csv") ? new CsvReader(filePath) : new TxtReader(filePath);
-                                    try
+                                if (!IsFileLocked(filePath))
+                                    tasks.Add(Task.Run(() =>
                                     {
+                                        FileReader fileReader = filePath.EndsWith(".csv") ? new CsvReader(filePath) : new TxtReader(filePath);
                                         DataProcessor.Process(fileReader);
                                         metaLogFileManager.ChangeMetaLogData(fileReader);
-                                    }
-                                    catch
-                                    {
-                                        fileReader.Close();
-                                    }
-                                }, cancellationToken.Token));                              
+
+                                    }, cancellationToken.Token));
                             }
                             if (MetaLogFileManager.HasDateChanged(date))
                             {
-                                WriteMetaLog(metaLogFileManager);
+                                WriteMetaLog(metaLogFileManager);                                
+                                TempFileManager.DeleteTemp(PathGetter.GetOutputDirectory(DateTime.Now.Date.AddDays(-1).ToShortDateString()) + "/.temp");
                                 date = DateTime.Now;
                             }
-                            Task.WaitAll(tasks.ToArray());                          
+                            Task.WaitAll(tasks.ToArray());
                         }
                     }
                     catch (Exception ex)
@@ -75,6 +95,8 @@ namespace FirstTask
                         Console.WriteLine(ex.Message);
                     }
                 });
+            else
+                Console.WriteLine("You should write input and output derictory in config first and run program again.");
         }
         private void Reset()
         {
@@ -89,7 +111,7 @@ namespace FirstTask
         {
             try
             {
-                using (FileStream stream = File.Open(path,FileMode.Open, FileAccess.Read, FileShare.None))
+                using (FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.None))
                 {
                     stream.Close();
                 }
@@ -105,6 +127,6 @@ namespace FirstTask
             if (!metaLogFile.MetaLogExist())
                 metaLogFile.CreateMetaLog();
             metaLogFile.WriteMetaLog();
-        }
+        }     
     }
 }
