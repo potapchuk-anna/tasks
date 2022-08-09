@@ -17,15 +17,14 @@ namespace FirstTask
             this.path = path;
             reader = new StreamReader(path);
         }
-        public static int InvalidLines { get; protected set; } 
-        public static int PassedFiles { get; protected set; }
-        public static List<string> InvalidFilesList { get; protected set; } = new List<string>();
-        public static int PassedLines { get; protected set; }
+        public int InvalidLines { get; protected set; } 
+        public int PassedFiles { get; protected set; }
+        public List<string> InvalidFilesList { get; protected set; } = new List<string>();
+        public int PassedLines { get; protected set; }
         protected abstract CsvConfiguration CreateConfig();
 
         public List<Model> ReadData()
         {
-            int localInvalidLines = 0;
             List<Model> models = new List<Model>();
             var config = CreateConfig();
             using (var csv = new CsvHelper.CsvReader(reader, config))
@@ -40,11 +39,11 @@ namespace FirstTask
                     }
                     catch
                     {
-                        localInvalidLines++;
+                        InvalidLines++;
                         continue;
                     }
                 }
-                if(localInvalidLines > 0)
+                if(InvalidLines > 0)
                 {
                     InvalidFilesList.Add(path);
                 }
@@ -52,7 +51,6 @@ namespace FirstTask
                 {
                     PassedFiles++;
                 }
-                InvalidLines += localInvalidLines;
             }
             reader.Close();
             return models;
@@ -89,13 +87,6 @@ namespace FirstTask
         public void DeleteFile()
         {
             File.Delete(path);
-        }
-        public static void MetaLogDataClear()
-        {
-            InvalidLines = 0;
-            InvalidFilesList.Clear();
-            PassedFiles = 0;
-            PassedLines = 0;
         }
     }
 }

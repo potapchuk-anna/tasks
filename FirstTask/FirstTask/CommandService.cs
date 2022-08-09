@@ -3,7 +3,7 @@
 namespace FirstTask
 {
     internal class CommandService
-    {
+    {      
         private CancellationTokenSource cancellationToken = new CancellationTokenSource();
         public void ProcessCommand()
         {
@@ -32,7 +32,8 @@ namespace FirstTask
         }
         private void Start()
         {
-            DateTime date = DateTime.Now;           
+            DateTime date = DateTime.Now;
+            MetaLogFileManager metaLogFileManager = new MetaLogFileManager();
             cancellationToken = new CancellationTokenSource();           
             if (ConfigurationSettings.AppSettings["input"] is not null
             && ConfigurationSettings.AppSettings["output"] is not null)
@@ -52,7 +53,8 @@ namespace FirstTask
                                     FileReader fileReader = filePath.EndsWith(".csv") ? new CsvReader(filePath) : new TxtReader(filePath);
                                     try
                                     {
-                                        DataProcessor.Process(fileReader);                                     
+                                        DataProcessor.Process(fileReader);
+                                        metaLogFileManager.ChangeMetaLogData(fileReader);
                                     }
                                     catch
                                     {
@@ -62,7 +64,7 @@ namespace FirstTask
                             }
                             if (MetaLogFileManager.HasDateChanged(date))
                             {
-                                WriteMetaLog();
+                                WriteMetaLog(metaLogFileManager);
                                 date = DateTime.Now;
                             }
                             Task.WaitAll(tasks.ToArray());                          
@@ -82,7 +84,6 @@ namespace FirstTask
         private void Stop()
         {
             cancellationToken.Cancel();
-            FileReader.MetaLogDataClear();
         }
         protected bool IsFileLocked(string path)
         {
@@ -99,12 +100,11 @@ namespace FirstTask
             }
             return false;
         }
-        private void WriteMetaLog()
+        private void WriteMetaLog(MetaLogFileManager metaLogFile)
         {
-            if (!MetaLogFileManager.MetaLogExist())
-                MetaLogFileManager.CreateMetaLog();
-            MetaLogFileManager.WriteMetaLog();
-            FileReader.MetaLogDataClear();
+            if (!metaLogFile.MetaLogExist())
+                metaLogFile.CreateMetaLog();
+            metaLogFile.WriteMetaLog();
         }
     }
 }

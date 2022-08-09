@@ -25,7 +25,6 @@ namespace FirstTask
                 Directory.CreateDirectory(ConfigurationSettings.AppSettings["input"]);
                 return new List<string>();
             }
-
         }
         public static string GetOutputDirectory(string date)
         {

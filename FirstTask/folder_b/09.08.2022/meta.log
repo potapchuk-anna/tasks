@@ -1,0 +1,4 @@
+parsed_files: 2
+parsed_lines: 6
+found_errors: 4
+invalid_files: [./folder_a\input1.txt ./folder_a\input1.txt ]

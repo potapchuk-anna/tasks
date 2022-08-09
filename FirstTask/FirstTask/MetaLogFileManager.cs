@@ -8,23 +8,34 @@ namespace FirstTask
 {
     internal class MetaLogFileManager
     {
-        private static string path
+        private int InvalidLines;
+        private int PassedFiles;
+        private List<string> InvalidFilesList = new List<string>();
+        private int PassedLines;
+        private string path
         {
             get
             {
                return PathGetter.GetOutputDirectory(DateTime.Now.Date.AddDays(-1).ToShortDateString()) + "/meta.log";
             }
-        }         
-        public static void WriteMetaLog()
+        }
+        public void ChangeMetaLogData(FileReader fileReader)
+        {
+            InvalidLines += fileReader.InvalidLines;
+            PassedFiles += fileReader.PassedLines;
+            PassedLines+=fileReader.PassedLines;
+            InvalidFilesList.AddRange(fileReader.InvalidFilesList);
+        }
+        public void WriteMetaLog()
         {
             Dictionary<string, string> temp = new Dictionary<string, string>();
-            temp.Add("parsed_files", Convert.ToString(FileReader.PassedFiles));
-            temp.Add("parsed_lines", Convert.ToString(FileReader.PassedLines));
-            temp.Add("found_errors", Convert.ToString(FileReader.InvalidLines));
+            temp.Add("parsed_files", Convert.ToString(PassedFiles));
+            temp.Add("parsed_lines", Convert.ToString(PassedLines));
+            temp.Add("found_errors", Convert.ToString(InvalidLines));
             Func<string> func = () =>
             {
                 string str = "[";
-                foreach (var file in FileReader.InvalidFilesList)
+                foreach (var file in InvalidFilesList)
                 {
                     str += file + " ";
                 }
@@ -39,11 +50,11 @@ namespace FirstTask
             }
             File.WriteAllLines(path, lines);
         }
-        public static void CreateMetaLog()
+        public void CreateMetaLog()
         {
            File.Create(path).Close();
         }
-        public static bool MetaLogExist()
+        public bool MetaLogExist()
         {
             return File.Exists(path);
         }
